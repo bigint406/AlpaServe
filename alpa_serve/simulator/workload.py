@@ -389,6 +389,7 @@ class Workload:
         merged_requests = sum((x.requests for x in args), [])
 
         sorted_indices = np.argsort(merged_arrivals)
+        # 这种sort太慢了，sort之后还要随机访存才能得到排序后的结果
 
         arrivals = [None] * number
         requests = [None] * number

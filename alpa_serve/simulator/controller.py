@@ -489,9 +489,7 @@ def approximate_one_case_one_placement(placement, model_names, prof_ress, model_
                 num_stages, stage_latency, num_requests)
         else:
             (model_num_requests, model_num_good_requests,
-            group_num_requests, group_num_good_requests) = simulate_requests_mixed(
-                finish, good, tstamps, model_ids, slos, m_id2g_id,
-                num_stages, stage_latency, num_requests)
+            group_num_requests, group_num_good_requests) = simulate_requests_mixed(finish, good, tstamps, model_ids, slos, m_id2g_id,num_stages, stage_latency, num_requests)
     else:
         (model_num_requests, model_num_good_requests,
          group_num_requests, group_num_good_requests) = simulate_requests(
@@ -558,7 +556,7 @@ def simulate_requests(finish, good, tstamps, model_ids, slos, m_id2g_id,
             group_num_requests, group_num_good_requests)
 
 
-@numba.jit(nopython=True)
+# @numba.jit(nopython=True)
 def simulate_requests_mixed(finish, good, tstamps, model_ids, slos, m_id2g_id,
                             num_stages, stage_latency, num_requests):
     # num_stages: num_groups
@@ -570,7 +568,7 @@ def simulate_requests_mixed(finish, good, tstamps, model_ids, slos, m_id2g_id,
     device_clocks = np.zeros((num_groups, max_num_stages), dtype=np.float64)
     group_num_requests = np.zeros(num_groups, dtype=np.int32)
     group_num_good_requests = np.zeros(num_groups, dtype=np.int32)
-    model_num_requests = np.zeros(num_models, dtype=np.int32)
+    model_num_requests = np.zeros(num_models, dtype=np.int32) # 第i个模型当前的请求数量
     model_num_good_requests = np.zeros(num_models, dtype=np.int32)
     fixed_overhead = 0.011
 

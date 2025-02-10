@@ -354,11 +354,11 @@ def replica_placement_fast_greedy(init_sol: ModelPlacement,
             for x in model_datas]
 
     # Greedy placement
-    sol = init_sol
+    sol = init_sol # 初始解
     it = 0
 
     while True:
-        stats = evaluator.get_stats([sol])[0]
+        stats = evaluator.get_stats([sol])[0] # 模拟评估初始解的效果
         overall_goodput, goodputs, group_num_requests, fullstats = stats
 
         # Find the most unserved model and the most available group

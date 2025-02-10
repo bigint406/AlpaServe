@@ -31,7 +31,7 @@ EqualModelCase = namedtuple("EqualModelCase", [
     "test_start", "test_end"])
 
 def get_equal_model_serving_case(case, prof_database=None):
-    if prof_database is None:
+    if prof_database is None: # 读取拟合结果，得到每层执行时间
         prof_database = ProfilingDatabase("profiling_result.pkl")
 
     (exp_name, num_devices, mem_budget, model_type, num_models,
@@ -49,7 +49,7 @@ def get_equal_model_serving_case(case, prof_database=None):
         single_latency = {
         model_type: sum(prof_database.get(model_type).para_dict[ParallelConfig(1,1,1)
         ].latency[1]) for model_type in set(model_types)}
-    slos = [slo_scale * single_latency[model_type]] * num_models
+    slos = [slo_scale * single_latency[model_type]] * num_models # 将执行时间的固定倍数作为slo
 
     if rate_distribution == "uniform":
         rates = [total_rate / num_models] * num_models
@@ -80,7 +80,7 @@ def get_equal_model_serving_case(case, prof_database=None):
     else:
         raise ValueError(f"Invalid rate distribution: {rate_distribution}")
 
-    train_workload = None
+    train_workload = None # 确定到来的工作负载特征
     if arrival_process == "gamma":
         arrival_processes = [
             GammaProcess(rates[i], arrival_process_kwargs["cv"])
@@ -120,7 +120,7 @@ def get_equal_model_serving_case(case, prof_database=None):
         ws = []
         for model_name, slo in zip(model_names, slos):
             ws.append(train_replays[model_name].to_workload(slo))
-        train_workload = Workload.merge(*ws)
+        train_workload = Workload.merge(*ws) # 把各应用的负载合成在一起
 
         # for debugging:
 
@@ -254,7 +254,7 @@ def run_one_equal_model_case(case, mode,
                              debug=False,
                              enable_batching=False,
                              return_stats_and_placement=False):
-    serving_case = get_equal_model_serving_case(case, prof_database)
+    serving_case = get_equal_model_serving_case(case, prof_database) # 预处理SLO、负载
     if mode == "simulate":
         stats, placement = approximate_one_case(serving_case, debug=debug, enable_batching=enable_batching)
     else:
