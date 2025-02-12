@@ -226,7 +226,7 @@ if __name__ == "__main__":
                         arrival_process, arrival_process_kwargs,
                         fixed_slo_scale, duration, policy_name, None, None, None, None))
 
-    n_cases = len(cases)
+    n_cases = len(cases) # 前面是添加各种case，这里以M为并行度运行所有case
     M = 8
     n_case_each_run = (n_cases + M - 1) // M
     for i in range(M):

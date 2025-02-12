@@ -125,15 +125,15 @@ def load_trace(path: str) -> OrderedDict:
         tracelines = pickle.load(handle)
     print(f"Reading takes: {time.time() - tic}s.")
 
-    # Do some check and report stats:
-    num_functions = len(tracelines.keys())
-    num_function_invocations = []
-    for function_name, trace in tracelines.items():
-        if trace.dtype == np.int32:
-            num_function_invocations.append(np.sum(trace))
-        else:
-            num_function_invocations.append(trace.size)
     if DEBUG:
+        # Do some check and report stats:
+        num_functions = len(tracelines.keys())
+        num_function_invocations = []
+        for function_name, trace in tracelines.items():
+            if trace.dtype == np.int32:
+                num_function_invocations.append(np.sum(trace))
+            else:
+                num_function_invocations.append(trace.size)
         print(f"Trace: {path[:-4]}, stats: #days: 14, #functions: {num_functions}, "
               f"total invocations: {sum(num_function_invocations)}, "
               f"max: {max(num_function_invocations)}, min: {min(num_function_invocations)}, "
@@ -206,7 +206,7 @@ class TraceReplay:
         plt.ylabel("#requests")
         plt.xlabel("time (s)")
         plt.legend()
-        plt.ylim(0, 200)
+        # plt.ylim(0, 200)
         fig = plt.gcf()
         figure_size = (8, 4)
         fig.set_size_inches(figure_size)

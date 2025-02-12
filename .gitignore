@@ -96,3 +96,7 @@ experiments/motivation/**/*.pkl
 
 # ipython
 .ipynb_checkpoints
+
+# test
+test.ipynb
+test.py
